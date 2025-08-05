@@ -84,7 +84,29 @@
       font-family: monospace;
       border-radius: 8px;
     }
-  </style>
+  
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+      .row {
+        flex-direction: column;
+      }
+      .row input,
+      .row select,
+      .item-row input {
+        width: 100% !important;
+      }
+      .item-row {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+      }
+    }
+    </style>
+    
 </head>
 <body>
   <div class="container">
