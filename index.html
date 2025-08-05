@@ -143,7 +143,10 @@
 
     <button onclick="gerarProtocolo()">Gerar Protocolo</button>
 
+    
     <div id="confirmacao" class="confirmacao" style="display:none;"></div>
+    <button onclick="copiarTexto()" id="btnCopiar" style="display:none;">Copiar comprovante</button>
+    
   </div>
 
   <script>
@@ -217,6 +220,23 @@ Cobrar do cliente: R$${cobrar.toFixed(2)}`;
       confirmacao.textContent = mensagem;
       confirmacao.style.display = "block";
     }
-  </script>
+  
+    function copiarTexto() {
+      const texto = document.getElementById("confirmacao").innerText;
+      navigator.clipboard.writeText(texto).then(function() {
+        alert("Comprovante copiado para a área de transferência!");
+      });
+    }
+
+    const btnCopiar = document.getElementById("btnCopiar");
+    const divConfirmacao = document.getElementById("confirmacao");
+    const originalGerarProtocolo = gerarProtocolo;
+
+    gerarProtocolo = function () {
+      originalGerarProtocolo();
+      btnCopiar.style.display = "inline-block";
+    };
+    </script>
+    
 </body>
 </html>
