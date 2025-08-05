@@ -2,237 +2,220 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Gerador de Protocolo - Docce</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #fbb03b, #8cc63f);
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 800px;
-            margin: auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        img.logo {
-            display: block;
-            max-width: 150px;
-            margin: 0 auto 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #444;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 8px;
-            margin: 6px 0 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .hidden {
-            display: none;
-        }
-        .item-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .item-row input {
-            flex: 1;
-        }
-        .item-row input:first-child {
-            max-width: 80px;
-        }
-        .confirmation {
-            background: #f0fff0;
-            border: 1px solid #90ee90;
-            padding: 15px;
-            margin-top: 20px;
-            white-space: pre-wrap;
-            font-family: monospace;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Gerador de Protocolo - Docce</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'PT Sans', sans-serif;
+      background: linear-gradient(to right, #fbb03b, #8cc63f);
+    }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 160px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #444;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .row input, .row select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .row input[type="text"],
+    .row input[type="number"],
+    .row select {
+      flex: 1;
+    }
+    .item-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .item-row input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .qtd {
+      width: 80px;
+    }
+    .nome-item {
+      flex: 1;
+    }
+    .valor {
+      width: 120px;
+    }
+    button {
+      background: #fbb03b;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .confirmacao {
+      margin-top: 30px;
+      padding: 15px;
+      background: #f0fff0;
+      border: 1px solid #8bc34a;
+      white-space: pre-wrap;
+      font-family: monospace;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="logo docce (1).png" alt="Docce Logo" class="logo">
-        <h1>Gerador de Protocolo</h1>
+  <div class="container">
+    <img src="logo docce (1).png" alt="Logo Docce" class="logo" />
+    <h1>Gerador de Protocolo</h1>
 
-        
-        <div style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-                <label>Nome:</label>
-                <input type="text" id="nome">
-            </div>
-            
-            <div style="width: 160px; margin-left: 10px;">
-                <label>Telefone:</label>
-                <input type="text" id="telefone" maxlength="15">
-            </div>
-    
-        </div>
-    
-
-        <label>Tipo:</label>
-        <select id="tipo" onchange="toggleEndereco()" style="width: auto; min-width: 120px;">
-            <option value="retirada">Retirada</option>
-            <option value="delivery">Delivery</option>
-        </select>
-
-        <div id="enderecoFields" class="hidden">
-            
-            <div style="display: flex; gap: 10px;">
-                <div style="flex: 2;">
-                    <label>Rua:</label>
-                    <input type="text" id="rua">
-                </div>
-                
-                <div style="width: 100px; margin-left: 10px;">
-                    <label>Número:</label>
-                    <input type="text" id="numero" maxlength="5">
-                </div>
-    
-            </div>
-            <div>
-                <label>Bairro:</label>
-                <input type="text" id="bairro">
-            </div>
-    
-
-            <label>Taxa de entrega:</label>
-            
-            <select id="taxa" style="width: auto; min-width: 80px;">
-                <option value="">Selecione</option>
-                <option value="7">R$7</option>
-                <option value="8">R$8</option>
-                <option value="9">R$9</option>
-                <option value="10">R$10</option>
-                <option value="11">R$11</option>
-                <option value="12">R$12</option>
-                <option value="13">R$13</option>
-                <option value="14">R$14</option>
-                <option value="15">R$15</option>
-            </select>
-    
-                <option value="0">Selecione</option>
-                ${[f'<option value="{i}">R${i},00</option>' for i in range(7, 16)]}
-            </select>
-        </div>
-
-        <div id="itensContainer">
-            <label>Itens:</label>
-        </div>
-        <button onclick="addItem()">Adicionar item</button>
-
-        
-        
-        <div style="display: flex; gap: 10px; align-items: flex-end;">
-            <div style="flex: 1;">
-                
-                <select id="pagamento" style="width: auto; min-width: 160px;">
-                    <option value="PIX">PIX</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Cartão de crédito">Cartão de crédito</option>
-                    <option value="Cartão de débito">Cartão de débito</option>
-                </select>
-            </div>
-            <div style="width: 140px;">
-                <label>Valor pago:</label>
-                <input type="number" id="valorPago" value="0">
-            </div>
-        </div>
-    
-            <option value="PIX">PIX</option>
-            <option value="Cartão">Cartão</option>
-            <option value="Dinheiro">Dinheiro</option>
-        </select>
-
-        
-
-        <button onclick="gerarProtocolo()">Gerar Protocolo</button>
-
-        <div id="confirmacao" class="confirmation hidden"></div>
+    <div class="row">
+      <input type="text" id="nome" placeholder="Nome" />
+      <input type="text" id="telefone" placeholder="Telefone" maxlength="15" style="width: 160px;" />
     </div>
 
-    <script>
-        function toggleEndereco() {
-            const tipo = document.getElementById('tipo').value;
-            document.getElementById('enderecoFields').classList.toggle('hidden', tipo !== 'delivery');
-        }
+    <div class="row">
+      <select id="tipo" onchange="toggleEndereco()" style="width: auto;">
+        <option value="retirada">Retirada</option>
+        <option value="delivery">Delivery</option>
+      </select>
+    </div>
 
-        function addItem() {
-            const container = document.getElementById('itensContainer');
-            const row = document.createElement('div');
-            row.className = 'item-row';
-            row.innerHTML = `
-                <input type="number" placeholder="Qtd" class="qtd">
-                <input type="text" placeholder="Nome do item" class="item">
-                <input type="number" placeholder="Valor unitário" class="valor">
-            `;
-            container.appendChild(row);
-        }
+    <div id="enderecoCampos" style="display: none;">
+      <div class="row">
+        <input type="text" id="rua" placeholder="Rua" />
+        <input type="text" id="numero" placeholder="Número" maxlength="5" style="width: 100px;" />
+      </div>
+      <div class="row">
+        <input type="text" id="bairro" placeholder="Bairro" />
+        <select id="taxa" style="width: auto;">
+          <option value="">Taxa de entrega</option>
+          <option value="7">R$7</option>
+          <option value="8">R$8</option>
+          <option value="9">R$9</option>
+          <option value="10">R$10</option>
+          <option value="11">R$11</option>
+          <option value="12">R$12</option>
+          <option value="13">R$13</option>
+          <option value="14">R$14</option>
+          <option value="15">R$15</option>
+        </select>
+      </div>
+    </div>
 
-        function gerarProtocolo() {
-            const nome = document.getElementById('nome').value;
-            const telefone = document.getElementById('telefone').value;
-            const tipo = document.getElementById('tipo').value;
-            
-            const rua = document.getElementById('rua').value;
-            const numero = document.getElementById('numero').value;
-            const bairro = document.getElementById('bairro').value;
-    
-            const taxa = tipo === 'delivery' ? parseFloat(document.getElementById('taxa').value || 0) : 0;
+    <div id="itensContainer">
+      <label><strong>Itens:</strong></label>
+    </div>
+    <button onclick="addItem()">Adicionar item</button>
 
-            const pagamento = document.getElementById('pagamento').value;
-            const valorPago = parseFloat(document.getElementById('valorPago').value || 0);
+    <div class="row">
+      <select id="pagamento" style="width: auto;">
+        <option value="PIX">PIX</option>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão de crédito">Cartão de crédito</option>
+        <option value="Cartão de débito">Cartão de débito</option>
+      </select>
+      <input type="number" id="valorPago" value="0" placeholder="Valor pago" style="width: 140px;" />
+    </div>
 
-            const itens = Array.from(document.querySelectorAll('.item-row')).map(row => {
-                const qtd = parseInt(row.querySelector('.qtd').value || 0);
-                const nome = row.querySelector('.item').value;
-                const valor = parseFloat(row.querySelector('.valor').value || 0);
-                return { qtd, nome, valor, total: qtd * valor };
-            });
+    <button onclick="gerarProtocolo()">Gerar Protocolo</button>
 
-            const totalItens = itens.reduce((sum, item) => sum + item.total, 0);
-            const total = totalItens + taxa;
-            const cobrar = Math.max(0, total - valorPago);
+    <div id="confirmacao" class="confirmacao" style="display:none;"></div>
+  </div>
 
-            const protocolo = Math.random().toString(36).substr(2, 6).toUpperCase();
+  <script>
+    function toggleEndereco() {
+      const tipo = document.getElementById("tipo").value;
+      document.getElementById("enderecoCampos").style.display =
+        tipo === "delivery" ? "block" : "none";
+    }
 
-            let mensagem = `Protocolo: ${protocolo}
+    function addItem() {
+      const container = document.getElementById("itensContainer");
+      const row = document.createElement("div");
+      row.className = "item-row";
+      row.innerHTML = `
+        <input type="number" class="qtd" placeholder="Qtd">
+        <input type="text" class="nome-item" placeholder="Nome do item">
+        <input type="number" class="valor" placeholder="Valor unitário">
+      `;
+      container.appendChild(row);
+    }
+
+    function gerarProtocolo() {
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const tipo = document.getElementById("tipo").value;
+      const rua = document.getElementById("rua").value;
+      const numero = document.getElementById("numero").value;
+      const bairro = document.getElementById("bairro").value;
+      const taxa = tipo === "delivery" ? parseFloat(document.getElementById("taxa").value || 0) : 0;
+
+      const pagamento = document.getElementById("pagamento").value;
+      const valorPago = parseFloat(document.getElementById("valorPago").value || 0);
+
+      const itens = Array.from(document.querySelectorAll(".item-row")).map(row => {
+        const qtd = parseInt(row.querySelector(".qtd").value || 0);
+        const nome = row.querySelector(".nome-item").value;
+        const valor = parseFloat(row.querySelector(".valor").value || 0);
+        return { qtd, nome, valor, total: qtd * valor };
+      });
+
+      const totalItens = itens.reduce((sum, item) => sum + item.total, 0);
+      const total = totalItens + taxa;
+      const cobrar = Math.max(0, total - valorPago);
+
+      const protocolo = Math.random().toString(36).substr(2, 6).toUpperCase();
+
+      let mensagem = `Protocolo: ${protocolo}
 Nome: ${nome}
 Telefone: ${telefone}
 Tipo: ${tipo}`;
-            if (tipo === 'delivery') mensagem += `
-Endereço: ${endereco}
+      if (tipo === "delivery") {
+        mensagem += `
+Endereço: ${rua}, ${numero} - ${bairro}
 Taxa de entrega: R$${taxa.toFixed(2)}`;
-            mensagem += `
+      }
+      mensagem += `
 
 Itens:
 `;
-            itens.forEach(item => {
-                mensagem += `- ${item.qtd} x ${item.nome} (R$${item.valor.toFixed(2)}) = R$${item.total.toFixed(2)}
+      itens.forEach(item => {
+        mensagem += `- ${item.qtd} x ${item.nome} (R$${item.valor.toFixed(2)}) = R$${item.total.toFixed(2)}
 `;
-            });
-            mensagem += `
+      });
+      mensagem += `
 Total: R$${total.toFixed(2)}
 Forma de pagamento: ${pagamento}
 Valor pago: R$${valorPago.toFixed(2)}
 Cobrar do cliente: R$${cobrar.toFixed(2)}`;
 
-            const confirmacao = document.getElementById('confirmacao');
-            confirmacao.textContent = mensagem;
-            confirmacao.classList.remove('hidden');
-        }
-    </script>
+      const confirmacao = document.getElementById("confirmacao");
+      confirmacao.textContent = mensagem;
+      confirmacao.style.display = "block";
+    }
+  </script>
 </body>
 </html>
