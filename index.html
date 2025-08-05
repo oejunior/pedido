@@ -224,8 +224,10 @@ Cobrar do cliente: R$${cobrar.toFixed(2)}`;
       confirmacao.style.display = "block";
     }
   
+    
     function copiarTexto() {
-      const texto = document.getElementById("confirmacao").innerText;
+      const texto = document.getElementById("confirmacao").textContent;
+
       navigator.clipboard.writeText(texto).then(function() {
         alert("Comprovante copiado para a área de transferência!");
       });
