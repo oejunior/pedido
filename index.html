@@ -3,154 +3,203 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Bolos da Docce - Pedido Manual com Quantidade</title>
+    <title>Gerador de Protocolo - Docce</title>
     <style>
         body {
-            font-family: 'PT Sans', sans-serif;
-            background: linear-gradient(to bottom right, #fdbb2d, #22c1c3);
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #fbb03b, #8cc63f);
             padding: 20px;
             color: #333;
         }
-        .logo {
-            width: 200px;
-            margin-bottom: 20px;
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        img.logo {
+            display: block;
+            max-width: 150px;
+            margin: 0 auto 20px;
         }
         h1 {
             text-align: center;
+            color: #444;
         }
-        .form-group {
-            margin-bottom: 15px;
+        label {
+            font-weight: bold;
         }
-        input, select {
-            padding: 8px;
+        input, select, button {
             width: 100%;
-            margin-top: 5px;
-        }
-        button {
-            padding: 10px 15px;
-            margin-top: 10px;
-        }
-        .product-item {
+            padding: 8px;
+            margin: 6px 0 15px;
+            border-radius: 5px;
             border: 1px solid #ccc;
-            padding: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .item-row {
+            display: flex;
+            gap: 10px;
             margin-bottom: 10px;
         }
-        #comprovante {
-            margin-top: 30px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
+        .item-row input {
+            flex: 1;
         }
-        #comprovante h2 {
-            margin-top: 0;
+        .item-row input:first-child {
+            max-width: 80px;
+        }
+        .confirmation {
+            background: #f0fff0;
+            border: 1px solid #90ee90;
+            padding: 15px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
         }
     </style>
 </head>
 <body>
-    <img src="logo docce (1).png" alt="Logo Docce" class="logo">
-    <h1>Pedido Manual - Bolos da Docce</h1>
+    <div class="container">
+        <img src="logo docce (1).png" alt="Docce Logo" class="logo">
+        <h1>Gerador de Protocolo</h1>
 
-    <div class="form-group">
-        <label>Nome do Cliente</label>
-        <input type="text" id="nomeCliente">
-    </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label>Nome:</label>
+                <input type="text" id="nome">
+            </div>
+            <div style="flex: 1;">
+                <label>Telefone:</label>
+                <input type="text" id="telefone">
+            </div>
+        </div>
+    
 
-    <div class="form-group">
-        <label>Telefone</label>
-        <input type="text" id="telefone">
-    </div>
-
-    <div class="form-group">
-        <label>Tipo de Entrega</label>
-        <select id="tipoEntrega">
-            <option value="Retirada">Retirada</option>
-            <option value="Delivery">Delivery</option>
+        <label>Tipo:</label>
+        <select id="tipo" onchange="toggleEndereco()">
+            <option value="retirada">Retirada</option>
+            <option value="delivery">Delivery</option>
         </select>
-    </div>
 
-    <div class="form-group">
-        <label>Taxa de Entrega (R$)</label>
-        <select id="taxaEntrega">
-            <option value="0">0</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
+        <div id="enderecoFields" class="hidden">
+            
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 2;">
+                    <label>Rua:</label>
+                    <input type="text" id="rua">
+                </div>
+                <div style="flex: 1;">
+                    <label>Número:</label>
+                    <input type="text" id="numero">
+                </div>
+            </div>
+            <div>
+                <label>Bairro:</label>
+                <input type="text" id="bairro">
+            </div>
+    
+
+            <label>Taxa de entrega:</label>
+            <select id="taxa">
+                <option value="0">Selecione</option>
+                ${[f'<option value="{i}">R${i},00</option>' for i in range(7, 16)]}
+            </select>
+        </div>
+
+        <div id="itensContainer">
+            <label>Itens:</label>
+        </div>
+        <button onclick="addItem()">Adicionar item</button>
+
+        <label>Forma de Pagamento:</label>
+        <select id="pagamento">
+            <option value="PIX">PIX</option>
+            <option value="Cartão">Cartão</option>
+            <option value="Dinheiro">Dinheiro</option>
         </select>
+
+        <label>Valor pago:</label>
+        <input type="number" id="valorPago" value="0">
+
+        <button onclick="gerarProtocolo()">Gerar Protocolo</button>
+
+        <div id="confirmacao" class="confirmation hidden"></div>
     </div>
-
-    <div class="form-group">
-        <label>Adiantamento (R$)</label>
-        <input type="number" id="adiantamento" value="0">
-    </div>
-
-    <h3>Itens do Pedido</h3>
-    <div id="itens"></div>
-    <button onclick="adicionarItem()">Adicionar Item</button>
-
-    <div class="form-group">
-        <button onclick="gerarComprovante()">Gerar Comprovante</button>
-    </div>
-
-    <div id="comprovante"></div>
 
     <script>
-        let contador = 0;
-
-        function adicionarItem() {
-            contador++;
-            const div = document.createElement('div');
-            div.className = 'product-item';
-            div.innerHTML = `
-                <label>Produto ${contador}:</label><br>
-                <input type="text" placeholder="Nome do Produto" class="produto-nome"><br>
-                <input type="number" placeholder="Quantidade" class="produto-quantidade" value="1" min="1"><br>
-                <input type="number" placeholder="Valor Unitário (R$)" class="produto-valor">
-            `;
-            document.getElementById('itens').appendChild(div);
+        function toggleEndereco() {
+            const tipo = document.getElementById('tipo').value;
+            document.getElementById('enderecoFields').classList.toggle('hidden', tipo !== 'delivery');
         }
 
-        function gerarComprovante() {
-            const nome = document.getElementById('nomeCliente').value;
-            const telefone = document.getElementById('telefone').value;
-            const tipoEntrega = document.getElementById('tipoEntrega').value;
-            const taxaEntrega = parseFloat(document.getElementById('taxaEntrega').value);
-            const adiantamento = parseFloat(document.getElementById('adiantamento').value);
-
-            const nomes = document.querySelectorAll('.produto-nome');
-            const quantidades = document.querySelectorAll('.produto-quantidade');
-            const valores = document.querySelectorAll('.produto-valor');
-            let lista = '';
-            let subtotal = 0;
-
-            for (let i = 0; i < nomes.length; i++) {
-                const nomeProd = nomes[i].value;
-                const qtd = parseInt(quantidades[i].value) || 1;
-                const valorUnit = parseFloat(valores[i].value) || 0;
-                const totalProd = qtd * valorUnit;
-                lista += `<li>${qtd}x ${nomeProd} - R$ ${totalProd.toFixed(2)}</li>`;
-                subtotal += totalProd;
-            }
-
-            const total = subtotal + taxaEntrega - adiantamento;
-            const protocolo = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-            document.getElementById('comprovante').innerHTML = `
-                <h2>Comprovante de Pedido</h2>
-                <p><strong>Protocolo:</strong> ${protocolo}</p>
-                <p><strong>Cliente:</strong> ${nome}</p>
-                <p><strong>Telefone:</strong> ${telefone}</p>
-                <p><strong>Tipo de Entrega:</strong> ${tipoEntrega}</p>
-                <ul>${lista}</ul>
-                <p><strong>Subtotal:</strong> R$ ${subtotal.toFixed(2)}</p>
-                <p><strong>Adiantamento:</strong> R$ ${adiantamento.toFixed(2)}</p>
-                <p><strong><b>Total a Pagar:</b></strong> R$ ${total.toFixed(2)}</p>
+        function addItem() {
+            const container = document.getElementById('itensContainer');
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+                <input type="number" placeholder="Qtd" class="qtd">
+                <input type="text" placeholder="Nome do item" class="item">
+                <input type="number" placeholder="Valor unitário" class="valor">
             `;
+            container.appendChild(row);
+        }
+
+        function gerarProtocolo() {
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const tipo = document.getElementById('tipo').value;
+            
+            const rua = document.getElementById('rua').value;
+            const numero = document.getElementById('numero').value;
+            const bairro = document.getElementById('bairro').value;
+    
+            const taxa = tipo === 'delivery' ? parseFloat(document.getElementById('taxa').value || 0) : 0;
+
+            const pagamento = document.getElementById('pagamento').value;
+            const valorPago = parseFloat(document.getElementById('valorPago').value || 0);
+
+            const itens = Array.from(document.querySelectorAll('.item-row')).map(row => {
+                const qtd = parseInt(row.querySelector('.qtd').value || 0);
+                const nome = row.querySelector('.item').value;
+                const valor = parseFloat(row.querySelector('.valor').value || 0);
+                return { qtd, nome, valor, total: qtd * valor };
+            });
+
+            const totalItens = itens.reduce((sum, item) => sum + item.total, 0);
+            const total = totalItens + taxa;
+            const cobrar = Math.max(0, total - valorPago);
+
+            const protocolo = Math.random().toString(36).substr(2, 6).toUpperCase();
+
+            let mensagem = `Protocolo: ${protocolo}
+Nome: ${nome}
+Telefone: ${telefone}
+Tipo: ${tipo}`;
+            if (tipo === 'delivery') mensagem += `
+Endereço: ${endereco}
+Taxa de entrega: R$${taxa.toFixed(2)}`;
+            mensagem += `
+
+Itens:
+`;
+            itens.forEach(item => {
+                mensagem += `- ${item.qtd} x ${item.nome} (R$${item.valor.toFixed(2)}) = R$${item.total.toFixed(2)}
+`;
+            });
+            mensagem += `
+Total: R$${total.toFixed(2)}
+Forma de pagamento: ${pagamento}
+Valor pago: R$${valorPago.toFixed(2)}
+Cobrar do cliente: R$${cobrar.toFixed(2)}`;
+
+            const confirmacao = document.getElementById('confirmacao');
+            confirmacao.textContent = mensagem;
+            confirmacao.classList.remove('hidden');
         }
     </script>
 </body>
